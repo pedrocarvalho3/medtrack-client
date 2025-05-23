@@ -8,6 +8,9 @@
     "scheme": "medtrack",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "extra": {
+      "API_URL": "http://192.168.0.109:3333"
+    },
     "ios": {
       "supportsTablet": true
     },

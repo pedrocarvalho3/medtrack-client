@@ -1,9 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import Constants from "expo-constants";
 import { useRouter } from "expo-router";
 import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { SafeAreaView } from "react-native";
 import { z } from "zod";
+import ShowAppToast from "../components/commons/ShowToast";
 import InputController from '../components/form/InputController';
 import { Button, ButtonText } from "../components/ui/button";
 import { Heading } from "../components/ui/heading";
@@ -17,7 +21,11 @@ const loginSchema = z.object({
 
 type LoginSchema = z.infer<typeof loginSchema>;
 
-const Login = () => {
+type Props = {
+  onLoginSuccess: () => void
+}
+
+const Login: React.FC<Props> = ({ onLoginSuccess }: Props) => {
   const toast = useToast()
 
   const { handleSubmit, control, formState: { errors } } = useForm<LoginSchema>({
@@ -29,11 +37,32 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleLogin = async (data: LoginSchema) => {
+    const apiUrl = Constants?.expoConfig?.extra?.API_URL;
     setIsLoading(true);
 
     try {
-    } catch (error) {
+      const response = await axios.post(`${apiUrl}/users/auth`, data);
 
+      const { token } = response.data;
+      await AsyncStorage.setItem("@app:token", token);
+
+      ShowAppToast(toast, "success", "Login realizado com sucesso!");
+      onLoginSuccess();
+    } catch (error) {
+      const defaultMessage = "Ocorreu um erro inesperado"
+
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status
+
+        const toastMessage =
+          status === 400
+            ? "Credencias inválidas!"
+            : defaultMessage
+
+        ShowAppToast(toast, "error", toastMessage)
+      } else {
+        ShowAppToast(toast, "error", defaultMessage)
+      }
     } finally {
       setIsLoading(false)
     }
@@ -43,7 +72,7 @@ const Login = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-100 justify-center mb-16">
+    <SafeAreaView className="flex-1 bg-gray-100 justify-center">
       <VStack space="xl" className="p-8">
         <Heading className="text-teal-500 font-bold text-7xl">
           Login
@@ -69,7 +98,7 @@ const Login = () => {
 
         <Button
           onPress={handleSubmit(handleLogin)}
-          className="rounded-xl text-teal-500 h-12 mt-4"
+          className="rounded-xl bg-teal-500 h-12 mt-4"
           disabled={isLoading}
         >
           <ButtonText>{isLoading ? "Carregando..." : "Login"}</ButtonText>
@@ -81,7 +110,7 @@ const Login = () => {
           disabled={isLoading}
         >
           <ButtonText className="text-teal-500">
-            Cadastrar minha organização
+            Cadastre-se
           </ButtonText>
         </Button>
       </VStack>
