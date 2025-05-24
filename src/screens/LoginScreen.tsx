@@ -69,13 +69,14 @@ const Login: React.FC<Props> = ({ onLoginSuccess }: Props) => {
   };
 
   const handleRegisterPress = () => {
+    router.navigate("/register")
   };
 
   return (
     <SafeAreaView className="flex-1 bg-gray-100 justify-center">
       <VStack space="xl" className="p-8">
         <Heading className="text-teal-500 font-bold text-7xl">
-          Login
+          Entrar
         </Heading>
         <VStack space="md">
           <InputController

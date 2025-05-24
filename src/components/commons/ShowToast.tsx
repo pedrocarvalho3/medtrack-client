@@ -1,8 +1,8 @@
-import { Toast, ToastTitle, ToastDescription } from "../ui/toast";
-import { HStack } from "../ui/hstack";
-import { VStack } from "../ui/vstack";
-import { Icon } from "../ui/icon";
 import { AlertCircleIcon, CheckCircleIcon, InfoIcon, XCircleIcon } from "lucide-react-native";
+import { HStack } from "../ui/hstack";
+import { Icon } from "../ui/icon";
+import { Toast, ToastDescription, ToastTitle } from "../ui/toast";
+import { VStack } from "../ui/vstack";
 
 type ToastType = "info" | "error" | "success" | "warning";
 
@@ -10,7 +10,7 @@ const ShowAppToast = (toast: any, type: ToastType, message: string, title?: stri
   const newId = Math.random();
 
   let IconComponent = InfoIcon;
-  let color = "blue-500";
+  let color = "teal-500";
   let defaultTitle = "Informação";
 
   if (type === "error") {

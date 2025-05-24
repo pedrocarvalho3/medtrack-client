@@ -1,6 +1,6 @@
 import { Text } from "@/src/components/ui/text";
 import HomeScreen from "@/src/screens/HomeScreen";
-import Login from "@/src/screens/Login";
+import LoginScreen from "@/src/screens/LoginScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 
@@ -22,6 +22,6 @@ export default function Index() {
   return logged ? (
     <HomeScreen onLogout={() => setLogged(false)} />
   ) : (
-    <Login onLoginSuccess={() => setLogged(true)} />
+    <LoginScreen onLoginSuccess={() => setLogged(true)} />
   );
 }

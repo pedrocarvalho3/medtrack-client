@@ -8,6 +8,7 @@ type InputControllerProps = {
   control: any;
   name: string;
   label: string;
+  placeholder?: string,
   secureTextEntry?: boolean;
   showToggle?: boolean;
   showPassword?: boolean;
@@ -19,6 +20,7 @@ const InputController = ({
   control,
   name,
   label,
+  placeholder,
   secureTextEntry,
   showToggle,
   showPassword,
@@ -42,6 +44,7 @@ const InputController = ({
               secureTextEntry={secureTextEntry && !showPassword}
               keyboardType={keyboardType}
               autoCapitalize="none"
+              placeholder={placeholder}
             />
             {showToggle && (
               <InputSlot className="pr-3" onPress={togglePassword}>
