@@ -15,7 +15,7 @@ import { VStack } from '../components/ui/vstack';
 interface ScheduledDose {
   id: string;
   scheduledAt: string;
-  status: 'PENDING' | 'TAKEN' | 'SNOOZED' | 'MISSED';
+  status: 'TAKEN' | 'SNOOZED' | 'MISSED';
   medication: {
     name: string;
     dosage: string;
@@ -45,7 +45,7 @@ const HistoryScreen: React.FC<Props> = ({ onLogout, toast }) => {
 
       const statusQuery = selectedStatuses.length > 0
         ? `&status=${selectedStatuses.join(',')}`
-        : '';
+        : '&status=TAKEN,SNOOZED,MISSED';
 
       const response = await axios.get(
         `${apiUrl}/scheduled-doses?page=1${statusQuery}`,
@@ -122,7 +122,6 @@ const HistoryScreen: React.FC<Props> = ({ onLogout, toast }) => {
   };
 
   const statusLabels = {
-    PENDING: 'Pendente',
     TAKEN: 'Tomado',
     SNOOZED: 'Adiado',
     MISSED: 'Perdido'
@@ -131,7 +130,7 @@ const HistoryScreen: React.FC<Props> = ({ onLogout, toast }) => {
   return (
     <SafeAreaView className="flex-1 bg-gray-100">
       <Box className="flex-row justify-between items-center p-4 border-b border-gray-200 bg-white">
-        <Text className="text-xl font-bold text-gray-800">Doses Agendadas</Text>
+        <Text className="text-xl font-bold text-gray-800">Histórico</Text>
         <View className="flex-row items-center">
           <TouchableOpacity className="mr-4" onPress={handleHistory}>
             <History size={24} className="text-gray-600" />
