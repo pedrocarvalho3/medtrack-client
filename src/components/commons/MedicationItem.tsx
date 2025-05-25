@@ -68,10 +68,22 @@ const MedicationItem: React.FC<Props> = ({ item, onPress }) => {
     const diffTime = date.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    if (diffDays < 0) return "destructive";
-    if (diffDays <= 7) return "secondary";
+    if (diffDays < 0) return "solid";
+    if (diffDays <= 7) return "solid";
     if (diffDays <= 30) return "outline";
-    return "default";
+    return "outline";
+  };
+
+  const getValidityTextColor = (validity: string) => {
+    const date = new Date(validity);
+    const today = new Date();
+    const diffTime = date.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays < 0) return "text-red-600";
+    if (diffDays <= 7) return "text-orange-600";
+    if (diffDays <= 30) return "text-yellow-600";
+    return "text-gray-600";
   };
 
   const isLowQuantity = item.quantityAvailable !== undefined && item.quantityAvailable < 5;
@@ -97,7 +109,6 @@ const MedicationItem: React.FC<Props> = ({ item, onPress }) => {
             )}
           </HStack>
 
-
           <Text className="text-gray-600 text-base">
             Tomar {item.dosage} {item.dosage === "1" ? "unidade" : "unidades"}
           </Text>
@@ -115,7 +126,7 @@ const MedicationItem: React.FC<Props> = ({ item, onPress }) => {
             <HStack className="items-center" space="sm">
               {item.quantityAvailable !== undefined && (
                 <Badge
-                  variant={isLowQuantity ? "destructive" : "outline"}
+                  variant={isLowQuantity ? "solid" : "outline"}
                   className="px-2 py-1"
                 >
                   <Text className={`text-xs font-medium ${isLowQuantity ? "text-red-600" : "text-gray-600"
@@ -129,7 +140,7 @@ const MedicationItem: React.FC<Props> = ({ item, onPress }) => {
             <HStack className="items-center" space="xs">
               <Calendar size={12} color="#6b7280" />
               <Badge variant={getValidityColor(item.validity)} className="px-2 py-1">
-                <Text className="text-xs font-medium">
+                <Text className={`text-xs font-medium ${getValidityTextColor(item.validity)}`}>
                   {formatValidity(item.validity)}
                 </Text>
               </Badge>

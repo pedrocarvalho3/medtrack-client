@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import Constants from "expo-constants";
 import { useRouter } from "expo-router";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from "react-hook-form";
 import { SafeAreaView } from "react-native";
 import { z } from "zod";
@@ -13,6 +13,7 @@ import { Button, ButtonText } from "../components/ui/button";
 import { Heading } from "../components/ui/heading";
 import { useToast } from "../components/ui/toast";
 import { VStack } from "../components/ui/vstack";
+import { useMedicationNotifier } from "../hooks/useMedicationNotifier";
 
 const loginSchema = z.object({
   email: z.string().email("Email inválido!"),
@@ -25,7 +26,7 @@ type Props = {
   onLoginSuccess: () => void
 }
 
-const Login: React.FC<Props> = ({ onLoginSuccess }: Props) => {
+const LoginScreen: React.FC<Props> = ({ onLoginSuccess }: Props) => {
   const toast = useToast()
 
   const { handleSubmit, control, formState: { errors } } = useForm<LoginSchema>({
@@ -36,9 +37,34 @@ const Login: React.FC<Props> = ({ onLoginSuccess }: Props) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const [notificationToken, setNotificationToken] = useState<string | null>(null);
+
+  const { registerForPushNotificationsAsync } = useMedicationNotifier();
+
+  useEffect(() => {
+    const getToken = async () => {
+      console.log("Tentando obter o token de notificação...");
+      const token = await registerForPushNotificationsAsync();
+      if (token) {
+        console.log("Token de notificação obtido no LoginScreen:", token);
+        setNotificationToken(token);
+      } else {
+        console.log("Não foi possível obter o token de notificação.");
+      }
+    };
+    getToken();
+  }, [registerForPushNotificationsAsync]);
+
   const handleLogin = async (data: LoginSchema) => {
     const apiUrl = Constants?.expoConfig?.extra?.API_URL;
     setIsLoading(true);
+
+    const loginPayload = {
+      ...data,
+      notificationToken: notificationToken,
+    };
+
+    console.log("Enviando payload de login para a API:", loginPayload);
 
     try {
       const response = await axios.post(`${apiUrl}/users/auth`, data);
@@ -119,4 +145,4 @@ const Login: React.FC<Props> = ({ onLoginSuccess }: Props) => {
   );
 };
 
-export default Login;
+export default LoginScreen;

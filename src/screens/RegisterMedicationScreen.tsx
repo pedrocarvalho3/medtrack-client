@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Constants from "expo-constants";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { KeyboardAvoidingView, Platform, SafeAreaView, ScrollView } from "react-native";
 import { z } from "zod";
@@ -18,6 +18,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRouter } from "expo-router";
 import { useToast } from "../components/ui/toast";
+import { useMedicationNotifier } from "../hooks/useMedicationNotifier";
 
 const medicationSchema = z.object({
   name: z.string().min(1, "Nome do medicamento é obrigatório."),
@@ -137,6 +138,8 @@ const RegisterMedicationScreen = () => {
 
   const { control, handleSubmit, setValue, watch, formState: { errors } } = form;
 
+  const { syncAndScheduleNotifications } = useMedicationNotifier();
+
   const periodicityType = watch('periodicityType');
 
   const handleSaveMedication = async (data: MedicationSchema): Promise<void> => {
@@ -183,6 +186,7 @@ const RegisterMedicationScreen = () => {
       }
 
       ShowAppToast(toast, "success", "Medicamento cadastrado com sucesso!");
+      syncAndScheduleNotifications()
       router.back();
 
     } catch (error) {

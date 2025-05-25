@@ -81,7 +81,7 @@ const HomeScreen: React.FC<Props> = ({ onLogout }: Props) => {
       <Box className="flex-row justify-between items-center p-4 border-b border-gray-200 bg-white">
         <Text className="text-xl font-bold text-gray-800">Bem vindo</Text>
         <View className="flex-row items-center">
-          <TouchableOpacity className="mr-4">
+          <TouchableOpacity className="mr-4" onPress={() => router.navigate('/history')}>
             <History size={24} className="text-gray-600" />
           </TouchableOpacity>
           <TouchableOpacity onPress={handleLogout}>
