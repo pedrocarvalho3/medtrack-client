@@ -43,10 +43,8 @@ const LoginScreen: React.FC<Props> = ({ onLoginSuccess }: Props) => {
 
   useEffect(() => {
     const getToken = async () => {
-      console.log("Tentando obter o token de notificação...");
       const token = await registerForPushNotificationsAsync();
       if (token) {
-        console.log("Token de notificação obtido no LoginScreen:", token);
         setNotificationToken(token);
       } else {
         console.log("Não foi possível obter o token de notificação.");
@@ -59,15 +57,15 @@ const LoginScreen: React.FC<Props> = ({ onLoginSuccess }: Props) => {
     const apiUrl = Constants?.expoConfig?.extra?.API_URL;
     setIsLoading(true);
 
+    const cleanToken = notificationToken?.replace(/^ExponentPushToken\[(.+)\]$/, '$1') || '';
+
     const loginPayload = {
       ...data,
-      notificationToken: notificationToken,
+      notificationToken: cleanToken,
     };
 
-    console.log("Enviando payload de login para a API:", loginPayload);
-
     try {
-      const response = await axios.post(`${apiUrl}/users/auth`, data);
+      const response = await axios.post(`${apiUrl}/users/auth`, loginPayload);
 
       const { token } = response.data;
       await AsyncStorage.setItem("@app:token", token);

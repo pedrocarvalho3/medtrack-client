@@ -78,17 +78,16 @@ const useMedicationNotifier = () => {
 
     console.log('Permissão para notificações concedida.');
 
-    // try {
-    //   const tokenData = await Notifications.getExpoPushTokenAsync();
-    //   const token = tokenData.data;
-    //   console.log('Expo Push Token obtido:', token);
-    //   return token;
-    // } catch (error) {
-    //   console.error('Erro ao obter o Expo Push Token:', error);
-    //   Alert.alert('Erro', 'Não foi possível obter o token para notificações push.');
-    //   return null;
-    // }
-
+    try {
+      const tokenData = await Notifications.getExpoPushTokenAsync();
+      const token = tokenData.data;
+      console.log('Expo Push Token obtido:', token);
+      return token;
+    } catch (error) {
+      console.error('Erro ao obter o Expo Push Token:', error);
+      Alert.alert('Erro', 'Não foi possível obter o token para notificações push.');
+      return null;
+    }
   };
 
 

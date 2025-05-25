@@ -9,7 +9,11 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "extra": {
-      "API_URL": "http://192.168.0.109:3333"
+      "API_URL": "http://192.168.0.109:3333",
+      "router": {},
+      "eas": {
+        "projectId": "ba4a3a1e-0b25-4b8b-af0e-7e33ebb6400b"
+      }
     },
     "ios": {
       "supportsTablet": true
@@ -41,6 +45,7 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "owner": "thepdr"
   }
 }

@@ -158,8 +158,6 @@ const RegisterMedicationScreen = () => {
     try {
       const token = await AsyncStorage.getItem("@app:token");
 
-      console.log(payload)
-
       const response = await fetch(`${apiUrl}/medications`, {
         method: 'POST',
         headers: {
@@ -168,8 +166,6 @@ const RegisterMedicationScreen = () => {
         },
         body: JSON.stringify(payload),
       });
-
-      console.log(response)
 
       if (!response.ok) {
         const errorData = await response.json();

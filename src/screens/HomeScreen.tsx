@@ -178,8 +178,6 @@ const HomeScreen: React.FC<Props> = ({ onLogout }: Props) => {
     }
   };
 
-  console.log(medications)
-
   return (
     <SafeAreaView className="flex-1 bg-gray-100">
       <Box className="flex-row justify-between items-center p-4 border-b border-gray-200 bg-white">
